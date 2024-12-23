@@ -1,0 +1,29 @@
+/* General Reset */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;      /* Centers .mobile-container on the screen */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;      /* Full viewport height */
+}
+
+/* Main Mobile Container */
+.mobile-container {
+    position: relative;
+    width: 360px;
+    height: 640px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Homepage Banner */
+.homepage-banner {
+    width: 100%;
+    height: auto;
+    display: block;
+}

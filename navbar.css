@@ -1,0 +1,53 @@
+/* Bottom Navigation Bar */
+.bottom-nav {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+}
+
+/* Navigation Button Styling */
+.nav-item {
+    position: relative;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Icons Hidden by Default */
+.nav-item .icon {
+    display: none;
+    width: 24px;
+    height: 24px;
+}
+
+/* Rectangle Indicator Bar Hidden */
+.nav-item .indicator {
+    display: none;
+    width: 30px;
+    margin-top: 4px;
+}
+
+/* Active State: Show Orange Icon & Indicator */
+.nav-item.active .icon--orange {
+    display: block;
+}
+
+.nav-item.active .indicator {
+    display: block;
+}
+
+/* Inactive State: Show Black Icon */
+.nav-item:not(.active) .icon--black {
+    display: block;
+}

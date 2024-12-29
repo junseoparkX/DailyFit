@@ -1,3 +1,5 @@
+
+
 /* General Reset */
 body {
     margin: 0;
@@ -7,10 +9,10 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-}
-
-/* Main Mobile Container */
-.mobile-container {
+  }
+  
+  /* Main Mobile Container */
+  .mobile-container {
     position: relative;
     width: 360px;
     height: 640px;
@@ -19,10 +21,10 @@ body {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* Cloth Icon */
-.cloth-icon {
+  }
+  
+  /* Cloth Icon (top-right) */
+  .cloth-icon {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -30,55 +32,148 @@ body {
     border: none;
     cursor: pointer;
     z-index: 10;
-}
-
-.cloth-icon img {
+  }
+  .cloth-icon img {
     width: 48px;
     height: 48px;
-}
-
-.home-container {
+  }
+  
+  /* Bottom Navigation Bar */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+  }
+  
+  /* Navigation Button Styling */
+  .nav-item {
+    position: relative;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Icons Hidden by Default */
+  .nav-item .icon {
+    display: none;
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Rectangle Indicator Bar Hidden */
+  .nav-item .indicator {
+    display: none;
+    width: 30px;
+    margin-top: 4px;
+  }
+  
+  /* Active State: Show Orange Icon & Indicator */
+  .nav-item.active .icon--orange {
+    display: block;
+  }
+  .nav-item.active .indicator {
+    display: block;
+  }
+  
+  /* Inactive State: Show Black Icon */
+  .nav-item:not(.active) .icon--black {
+    display: block;
+  }
+  
+  /* Home Page */
+  .home-container {
     position: relative;
     width: 100%;
     height: 100%;
   }
-  
   .homepage-banner {
     display: block;
-    width: 100%;  
+    width: 100%;
     height: auto;
   }
-  
+  /* Mannequin */
   .mannequin {
-    /* Center the mannequin with absolute positioning, or tweak as needed */
     position: absolute;
     top: 35%;
     left: 55%;
     transform: translate(-50%, -50%);
     width: 450px;
     height: auto;
-    /* No filter at first => black */
-    filter: hue-rotate(0deg);
+    filter: hue-rotate(0deg); /* Start black */
   }
-
+  /* "Next" Button */
   .next-button {
     position: absolute;
-    top: 67%; /* Keep it below the mannequin */
+    top: 67%; 
     left: 50%;
     transform: translate(-50%, -50%);
-
     background: none;
     border: none;
     cursor: pointer;
-}
-
-/* If the button contains an image */
-.next-button img {
-    width: 100%; /* Make image fit the button */
+  }
+  /* If the button contains an image */
+  .next-button img {
+    width: 100%;
     height: 100%;
-    object-fit: contain; /* Ensure image scales proportionally */
-}
-
+    object-fit: contain;
+  }
   
-
-
+  /* Cloth Page */
+ /* Cloth Page: Two buttons at the top */
+.cloth-page {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* Use a top padding so buttons aren’t hidden behind a nav bar, if needed */
+    padding: 20px;
+    display: flex;
+    gap: 10px; /* space between the two buttons */
+  }
+  
+  .top-button {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    /* If you want them at the top, no extra margin needed */
+  }
+  
+  /* “Add Item” Form Container */
+  .add-item-page {
+    padding: 20px;
+    /* If you want the form to start near the top, remove any vertical centering */
+  }
+  
+  .add-item-page label {
+    display: block;
+    font-weight: bold;
+    margin: 10px 0 5px 0;
+  }
+  
+  .add-item-page select,
+  .add-item-page input {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+  }
+  
+  .add-item-page button {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #888;
+    background: #eee;
+    cursor: pointer;
+  }
+  

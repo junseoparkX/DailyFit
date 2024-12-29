@@ -5,37 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mobile Navigation</title>
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="navbar.css" /> <!-- Added new CSS file -->
+  <link rel="stylesheet" href="navbar.css" />
 </head>
 <body>
   <div class="mobile-container">
-    <!-- Main “homepage.svg” stays in the background -->
-    <img class="homepage-banner" src="Image/Page/homepage.svg" alt="Homepage" />
+    <!-- Main Content (Dynamic Content Here) -->
+    <div id="content">
+      <img class="homepage-banner" src="Image/Page/homepage.svg" alt="Homepage" />
+    </div>
+    
+    <!-- Cloth Icon (Top Right) -->
+    <button class="cloth-icon" id="clothIcon">
+      <img src="Image/Icon/cloth_icon.svg" alt="Cloth Icon" />
+    </button>
     
     <!-- Bottom nav bar -->
     <nav class="bottom-nav">
-      <!-- HOME icon -->
       <button class="nav-item active" data-target="home">
         <img src="Image/Icon/home_orange.svg" alt="Home (Active)" class="icon icon--orange" />
         <img src="Image/Icon/home_black.svg" alt="Home (Inactive)" class="icon icon--black" />
         <img src="Image/Icon/rectangle_bar.svg" alt="Indicator" class="indicator" />
       </button>
       
-      <!-- SEARCH icon -->
       <button class="nav-item" data-target="search">
         <img src="Image/Icon/search_orange.svg" alt="Search (Active)" class="icon icon--orange" />
         <img src="Image/Icon/search_black.svg" alt="Search (Inactive)" class="icon icon--black" />
         <img src="Image/Icon/rectangle_bar.svg" alt="Indicator" class="indicator" />
       </button>
       
-      <!-- HEART icon -->
       <button class="nav-item" data-target="heart">
         <img src="Image/Icon/heart_orange.svg" alt="Heart (Active)" class="icon icon--orange" />
         <img src="Image/Icon/heart_black.svg" alt="Heart (Inactive)" class="icon icon--black" />
         <img src="Image/Icon/rectangle_bar.svg" alt="Indicator" class="indicator" />
       </button>
       
-      <!-- USER icon -->
       <button class="nav-item" data-target="user">
         <img src="Image/Icon/user_orange.svg" alt="User (Active)" class="icon icon--orange" />
         <img src="Image/Icon/user_black.svg" alt="User (Inactive)" class="icon icon--black" />
@@ -43,15 +46,7 @@
       </button>
     </nav>
   </div>
-  
-  <script>
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        navItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-      });
-    });
-  </script>
+
+  <script src="script.js"></script>
 </body>
 </html>

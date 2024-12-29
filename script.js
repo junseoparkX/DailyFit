@@ -69,7 +69,7 @@ function showHomePage() {
 
 // ========== CLOTH PAGE ========== //
 function showClothPage() {
-  content.innerHTML = `
+    content.innerHTML = `
     <div class="cloth-page">
       <button id="createOutfitBtn" class="top-button">Create Outfit Set</button>
       <button id="addItemBtn" class="top-button">Add Item</button>
@@ -78,7 +78,8 @@ function showClothPage() {
 
   const createOutfitBtn = document.getElementById('createOutfitBtn');
   createOutfitBtn.addEventListener('click', () => {
-    alert('Create Outfit Set clicked (not implemented yet).');
+    // Instead of just an alert, actually show the Outfit Set page:
+    showOutfitSetPage();
   });
 
   const addItemBtn = document.getElementById('addItemBtn');
@@ -153,6 +154,92 @@ function showAddItemForm() {
     });
   });
 }
+
+function showOutfitSetPage() {
+    content.innerHTML = `
+      <div class="outfit-set-page">
+        <h2>Create Your Outfit</h2>
+        <div class="mannequin-area">
+          <img src="Image/Page/mannequin.svg" alt="Mannequin" class="mannequin" />
+  
+          <!-- Drop zones for hat/top/pants/shoes -->
+          <div class="drop-zone" data-slot="hat">Hat Slot</div>
+          <div class="drop-zone" data-slot="top">Top Slot</div>
+          <div class="drop-zone" data-slot="pants">Pants Slot</div>
+          <div class="drop-zone" data-slot="shoes">Shoes Slot</div>
+        </div>
+  
+        <!-- Scrollable list of items to drag -->
+        <div class="scroll-container" id="scrollContainer">
+          <!-- Items will be injected here from /api/items -->
+        </div>
+      </div>
+    `;
+  
+    // 1) Fetch existing items from the server
+    fetch('http://localhost:3000/api/items')
+      .then(response => response.json())
+      .then(items => {
+        const scrollContainer = document.getElementById('scrollContainer');
+  
+        // 2) For each item, create a small square DIV that is draggable
+        items.forEach(item => {
+          const div = document.createElement('div');
+          div.classList.add('draggable-item');
+          div.setAttribute('draggable', 'true');
+          
+          // Store some data to identify the item (e.g. tag, type, color, id)
+          div.dataset.id = item.id;
+          div.dataset.type = item.type;
+          div.dataset.color = item.color;
+          div.dataset.tag = item.tag;
+  
+          // Display just the tag or a combo
+          div.textContent = item.tag; // e.g. "hat1", "shoesRed", etc.
+  
+          // Handle dragstart
+          div.addEventListener('dragstart', e => {
+            // We’ll pass item info in dataTransfer
+            e.dataTransfer.setData('text/plain', JSON.stringify({
+              id: item.id,
+              tag: item.tag,
+              type: item.type,
+              color: item.color
+            }));
+          });
+  
+          scrollContainer.appendChild(div);
+        });
+      })
+      .catch(err => console.error('Error fetching items:', err));
+  
+    // 3) Drag/Drop events on the drop zones
+    const outfitSetPage = document.querySelector('.outfit-set-page');
+    
+    // Use event delegation or individually add:
+    outfitSetPage.addEventListener('dragover', e => {
+      // By default, dropping is disabled. We must preventDefault.
+      e.preventDefault();
+    });
+    
+    outfitSetPage.addEventListener('drop', e => {
+      e.preventDefault();
+      // Check if the drop target is one of the .drop-zone divs
+      const dropZone = e.target.closest('.drop-zone');
+      if (!dropZone) return; // not dropping on a valid zone
+  
+      // Retrieve dragged item’s data
+      const data = e.dataTransfer.getData('text/plain');
+      if (!data) return;
+  
+      const draggedItem = JSON.parse(data);
+      // For demonstration, we’ll just show a label in the zone
+      dropZone.textContent = `${draggedItem.tag}`;
+  
+      // Optionally store in some state, e.g. assignedItems[dropZone.dataset.slot] = draggedItem
+    });
+  }
+  
 
 // ========== TOP-RIGHT CLOTH ICON CLICK ========== //
 clothIcon.addEventListener('click', () => {

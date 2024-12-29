@@ -177,3 +177,92 @@ body {
     cursor: pointer;
   }
   
+
+
+
+
+
+  /* Outfit Set Page Layout */
+.outfit-set-page {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* The mannequin area + drop zones */
+  .mannequin-area {
+    position: relative;
+    flex: 100 100 300px;
+    margin-bottom: 10px;
+  }
+  
+  .mannequin-area .mannequin {
+    display: block;
+    width: 350px;    /* pick what you like */
+    left: 40%;
+    top: 150px;
+    margin: 0 auto; /* center horizontally */
+  }
+  
+  /* Example absolute positioning for drop zones
+     Tweak top/left to visually place them on the head, torso, legs, etc.
+  */
+  .drop-zone {
+    position: absolute;
+    width: 80px;  /* squares or rectangles */
+    height: 80px;
+    border: 2px dashed #aaa;
+    text-align: center;
+    line-height: 80px; /* vertical centering of text */
+    cursor: pointer;
+  }
+  .drop-zone[data-slot="hat"] {
+    top: 10px;
+    left: 80%;
+    transform: translateX(-50%);
+  }
+  .drop-zone[data-slot="top"] {
+    top: 70px;
+    left: 80%;
+    transform: translateX(-50%);
+  }
+  .drop-zone[data-slot="pants"] {
+    top: 130px;
+    left: 80%;
+    transform: translateX(-50%);
+  }
+  .drop-zone[data-slot="shoes"] {
+    top: 190px;
+    left: 80%;
+    transform: translateX(-50%);
+  }
+  
+  /* Scrollable container for items */
+  .scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;    /* or flex-direction: row */
+    gap: 10px;
+  }
+  
+  /* Draggable item squares */
+  .draggable-item {
+    width: 90px;
+    height: 60px;
+    border: 1px solid #888;
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: grab;
+  }
+  .draggable-item:active {
+    cursor: grabbing;
+  }
+  

@@ -26,15 +26,19 @@ DailyFit/
 
 1. Open the terminal and navigate to the server folder:
 ```bash
-cd C:\Users\junse\Desktop\DailyFit\cloth-app-server
+cd cloth-app-server
+```
+2. Install dependencies:
+```bash
+npm install
 ```
 
-2. Start the backend server:
+3. Start the backend server:
 ```bash
 node server.js
 ```
 
-3. Open the application in your browser:
+4. Open the application in your browser:
 ```
 http://localhost:3000
 ```

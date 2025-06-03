@@ -3,6 +3,9 @@ const navItems = document.querySelectorAll('.nav-item');
 const content = document.getElementById('content');
 const clothIcon = document.getElementById('clothIcon');
 
+// Stores the most recently submitted outfit
+let savedOutfit = null;
+
 // ========== BOTTOM NAV CLICK HANDLER ========== //
 navItems.forEach(item => {
   item.addEventListener('click', () => {
@@ -65,6 +68,18 @@ function showHomePage() {
     colorIndex = (colorIndex + 1) % rainbowFilters.length;
     mannequin.style.filter = rainbowFilters[colorIndex];
   });
+
+  // If an outfit was submitted, display the selected items
+  if (savedOutfit) {
+    const homeContainer = document.querySelector('.home-container');
+    Object.entries(savedOutfit).forEach(([slot, item]) => {
+      const div = document.createElement('div');
+      div.classList.add('saved-item');
+      div.dataset.slot = slot;
+      div.textContent = item.tag;
+      homeContainer.appendChild(div);
+    });
+  }
 }
 
 // ========== CLOTH PAGE ========== //
@@ -161,27 +176,38 @@ function showOutfitSetPage() {
         <h2>Create Your Outfit</h2>
         <div class="mannequin-area">
           <img src="Image/Page/mannequin.svg" alt="Mannequin" class="mannequin" />
-  
+
           <!-- Drop zones for hat/top/pants/shoes -->
           <div class="drop-zone" data-slot="hat">Hat Slot</div>
           <div class="drop-zone" data-slot="top">Top Slot</div>
           <div class="drop-zone" data-slot="pants">Pants Slot</div>
           <div class="drop-zone" data-slot="shoes">Shoes Slot</div>
         </div>
-  
-        <!-- Scrollable list of items to drag -->
+
+        <!-- Scrollable list of items to drag/click -->
         <div class="scroll-container" id="scrollContainer">
           <!-- Items will be injected here from /api/items -->
         </div>
+
+        <button id="submitOutfitBtn" class="submit-button">Submit Outfit</button>
       </div>
     `;
-  
+    // Keep track of which item is placed in each slot
+    const assignedItems = {};
+
     // 1) Fetch existing items from the server
     fetch('http://localhost:3000/api/items')
       .then(response => response.json())
       .then(items => {
         const scrollContainer = document.getElementById('scrollContainer');
-  
+
+        const typeToSlot = {
+          Hats: 'hat',
+          Tops: 'top',
+          Pants: 'pants',
+          Shoes: 'shoes'
+        };
+
         // 2) For each item, create a small square DIV that is draggable
         items.forEach(item => {
           const div = document.createElement('div');
@@ -204,10 +230,21 @@ function showOutfitSetPage() {
               id: item.id,
               tag: item.tag,
               type: item.type,
-              color: item.color
-            }));
+            color: item.color
+          }));
+        });
+
+          // Allow click-to-assign
+          div.addEventListener('click', () => {
+            const slotName = typeToSlot[item.type];
+            if (!slotName) return;
+            const zone = document.querySelector(`.drop-zone[data-slot="${slotName}"]`);
+            if (zone) {
+              zone.textContent = item.tag;
+              assignedItems[slotName] = item;
+            }
           });
-  
+
           scrollContainer.appendChild(div);
         });
       })
@@ -235,8 +272,16 @@ function showOutfitSetPage() {
       const draggedItem = JSON.parse(data);
       // For demonstration, we’ll just show a label in the zone
       dropZone.textContent = `${draggedItem.tag}`;
-  
-      // Optionally store in some state, e.g. assignedItems[dropZone.dataset.slot] = draggedItem
+
+      // Store the assignment
+      assignedItems[dropZone.dataset.slot] = draggedItem;
+    });
+
+    // Submit button stores the outfit and returns to home
+    const submitBtn = document.getElementById('submitOutfitBtn');
+    submitBtn.addEventListener('click', () => {
+      savedOutfit = assignedItems;
+      showHomePage();
     });
   }
   

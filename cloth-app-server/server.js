@@ -14,8 +14,16 @@ if (!fs.existsSync(DATA_FILE)) {
   fs.writeFileSync(DATA_FILE, '[]');
 }
 
-// Load existing data from file
-let items = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+// Load existing data from file with error handling in case the file is corrupted
+let items;
+try {
+  items = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+} catch (err) {
+  // If parsing fails, log the error and reset the file
+  console.error('Failed to parse data file, resetting to empty array:', err);
+  items = [];
+  fs.writeFileSync(DATA_FILE, '[]');
+}
 
 // Default route
 app.get('/', (req, res) => {

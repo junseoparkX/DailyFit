@@ -38,6 +38,26 @@ npm install
 node server.js
 ```
 
+## 🔬 Running Tests
+
+Install dependencies and run Jest tests from the server folder:
+
+```bash
+cd cloth-app-server
+npm install
+npm test
+```
+
+## 📦 Python Environment
+
+The `ml` directory contains machine learning utilities. Install the Python
+dependencies and run the example recommender:
+
+```bash
+pip install -r requirements.txt
+python ml/vision_recommender.py --data <image_folder> --query <image_file>
+```
+
 4. Open the application in your browser:
 ```
 http://localhost:3000
@@ -167,5 +187,5 @@ Ctrl + C
 ---
 
 ## 📝 **License**
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 

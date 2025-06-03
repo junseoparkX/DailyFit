@@ -1,0 +1,17 @@
+# Node dependencies
+cloth-app-server/node_modules/
+
+# Dataset images
+ml/data/myntradataset/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Jupyter
+*.ipynb_checkpoints
+
+# OS files
+.DS_Store

@@ -161,7 +161,8 @@ function showAddItemForm() {
   `;
 
   const submitItemBtn = document.getElementById('submitItemBtn');
-  submitItemBtn.addEventListener('click', () => {
+  submitItemBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     const itemType = document.getElementById('itemType').value;
     const itemColor = document.getElementById('itemColor').value;
     const itemTag = document.getElementById('itemTag').value.trim();
@@ -304,7 +305,8 @@ function showOutfitSetPage() {
 
     // Submit button stores the outfit and returns to cloth page
   const submitBtn = document.getElementById('submitOutfitBtn');
-  submitBtn.addEventListener('click', () => {
+  submitBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     savedOutfits.push({ ...assignedItems });
     persistOutfits();
     showOutfitSetPage();

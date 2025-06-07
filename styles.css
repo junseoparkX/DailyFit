@@ -14,8 +14,8 @@ body {
   /* Main Mobile Container */
   .mobile-container {
     position: relative;
-    width: 540px;
-    height: 960px;
+    width: min(90vw, 702px);
+    height: 100vh;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 10px;

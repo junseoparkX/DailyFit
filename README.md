@@ -33,6 +33,10 @@ cd cloth-app-server
 npm install
 ```
 
+If you encounter an error such as `Cannot find module 'debug'`, this means the
+dependencies have not been installed. Run the `npm install` command above and
+then try starting the server again.
+
 3. Start the backend server:
 ```bash
 node server.js

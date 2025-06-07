@@ -156,7 +156,7 @@ function showAddItemForm() {
       <label for="itemTag">Tag:</label>
       <input type="text" id="itemTag" placeholder="Enter a tag..." />
 
-      <button id="submitItemBtn">Submit</button>
+      <button id="submitItemBtn" type="button">Submit</button>
     </div>
   `;
 
@@ -332,8 +332,10 @@ function showDeleteItemPage() {
         label.textContent = `${item.type} ${item.color} ${item.tag} - Delete?`;
         const yes = document.createElement('button');
         yes.textContent = 'Yes';
+        yes.type = 'button';
         yes.classList.add('delete-btn');
-        yes.addEventListener('click', () => {
+        yes.addEventListener('click', (e) => {
+          e.preventDefault();
           fetch(`http://localhost:3000/api/item/${item.id}`, { method: 'DELETE' })
             .then(res => {
               if (res.ok) row.remove();
@@ -366,8 +368,10 @@ function showDeleteOutfitPage() {
     label.textContent = `Outfit ${idx + 1} - Delete?`;
     const yes = document.createElement('button');
     yes.textContent = 'Yes';
+    yes.type = 'button';
     yes.classList.add('delete-btn');
-    yes.addEventListener('click', () => {
+    yes.addEventListener('click', (e) => {
+      e.preventDefault();
       savedOutfits.splice(idx, 1);
       persistOutfits();
       row.remove();

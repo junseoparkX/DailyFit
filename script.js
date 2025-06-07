@@ -234,36 +234,24 @@ function showOutfitSetPage() {
           Shoes: 'shoes'
         };
 
-        const colorMap = {
-          Hats: 'red',
-          Tops: 'orange',
-          Pants: 'yellow',
-          Shoes: 'green'
+        const colorOrder = ['Red', 'Orange', 'Yellow', 'Green'];
+        const colorCssMap = {
+          Red: 'red',
+          Orange: 'orange',
+          Yellow: 'yellow',
+          Green: 'green'
         };
 
-        const catMap = {Hats: [], Tops: [], Pants: [], Shoes: []};
-        items.forEach(it => { if (catMap[it.type]) catMap[it.type].push(it); });
-
-        const ordered = [];
-        let idx = 0;
-        while (true) {
-          let added = false;
-          ['Hats','Tops','Pants','Shoes'].forEach(cat => {
-            for (let i = 0; i < 2; i++) {
-              const arr = catMap[cat];
-              if (arr[idx + i]) { ordered.push(arr[idx + i]); added = true; }
-            }
-          });
-          if (!added) break;
-          idx += 2;
-        }
+        const ordered = items.slice().sort(
+          (a, b) => colorOrder.indexOf(a.color) - colorOrder.indexOf(b.color)
+        );
 
         // 2) For each item, create a small square DIV that is draggable
         ordered.forEach(item => {
           const div = document.createElement('div');
           div.classList.add('draggable-item');
           div.setAttribute('draggable', 'true');
-          div.style.backgroundColor = colorMap[item.type] || '#eee';
+          div.style.backgroundColor = colorCssMap[item.color] || '#eee';
           
           // Store some data to identify the item (e.g. tag, type, color, id)
           div.dataset.id = item.id;

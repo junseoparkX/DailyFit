@@ -184,12 +184,12 @@ function showOutfitSetPage() {
           <div class="drop-zone" data-slot="shoes">Shoes Slot</div>
         </div>
 
+        <button id="submitOutfitBtn" class="submit-button">Submit Outfit</button>
+
         <!-- Scrollable list of items to drag/click -->
         <div class="scroll-container" id="scrollContainer">
           <!-- Items will be injected here from /api/items -->
         </div>
-
-        <button id="submitOutfitBtn" class="submit-button">Submit Outfit</button>
       </div>
     `;
     // Keep track of which item is placed in each slot

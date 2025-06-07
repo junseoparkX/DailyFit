@@ -249,7 +249,7 @@ body {
   /* Scrollable container for items */
   .scroll-container {
     flex: 1;
-    height: 50vh;
+    max-height: 60vh;
     overflow-y: auto;
     border: 1px solid #ccc;
     padding: 10px;

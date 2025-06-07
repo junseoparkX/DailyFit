@@ -4,6 +4,7 @@ const content = document.getElementById('content');
 
 // Stores all submitted outfits (persisted in localStorage)
 let savedOutfits = JSON.parse(localStorage.getItem('savedOutfits') || '[]');
+let lastOutfitIndex = -1;
 
 function persistOutfits() {
   localStorage.setItem('savedOutfits', JSON.stringify(savedOutfits));
@@ -39,16 +40,16 @@ navItems.forEach(item => {
 function showHomePage() {
   content.innerHTML = `
     <div class="home-container">
-      <img class="homepage-banner" src="Image/Page/homepage.svg" alt="Homepage" />
-      <img class="mannequin" id="mannequin" src="Image/Page/mannequin.svg" alt="Mannequin" />
-      <button id="nextButton" class="next-button">
-        <img src="Image/Page/next_button.svg" alt="Next Button" />
-      </button>
+      <img class="homepage-banner" src="Image/Page/homepage.svg" alt="Homepage"/>
+      <img class="mannequin" id="mannequin" src="Image/Page/mannequin.svg" alt="Mannequin"/>
+      <div class="recommendation-area">
+        <h3>Today's Recommendation</h3>
+        <button id="nextOutfitBtn" class="next-outfit">Next</button>
+      </div>
     </div>
   `;
-
-  const mannequin = document.getElementById('mannequin');
-  const nextButton = document.getElementById('nextButton');
+  const mannequin = document.getElementById("mannequin");
+  const nextOutfitBtn = document.getElementById("nextOutfitBtn");
 
   const rainbowFilters = [
     'none',  
@@ -63,25 +64,31 @@ function showHomePage() {
 
   let colorIndex = 0;
 
-  nextButton.addEventListener('click', () => {
+  nextOutfitBtn.addEventListener('click', () => {
     colorIndex = (colorIndex + 1) % rainbowFilters.length;
     mannequin.style.filter = rainbowFilters[colorIndex];
-    displayRandomOutfit();
+    displayRandomOutfit(true);
   });
 
   displayRandomOutfit();
 }
 
-function displayRandomOutfit() {
-  // Remove any existing displayed items
-  document.querySelectorAll('.saved-item').forEach(el => el.remove());
+function displayRandomOutfit(noRepeat = false) {
+  document.querySelectorAll(".saved-item").forEach(el => el.remove());
   if (savedOutfits.length === 0) return;
-  const index = Math.floor(Math.random() * savedOutfits.length);
+
+  let index = Math.floor(Math.random() * savedOutfits.length);
+  if (noRepeat && savedOutfits.length > 1) {
+    while (index === lastOutfitIndex) {
+      index = Math.floor(Math.random() * savedOutfits.length);
+    }
+  }
+  lastOutfitIndex = index;
   const outfit = savedOutfits[index];
-  const homeContainer = document.querySelector('.home-container');
+  const homeContainer = document.querySelector(".home-container");
   Object.entries(outfit).forEach(([slot, item]) => {
-    const div = document.createElement('div');
-    div.classList.add('saved-item');
+    const div = document.createElement("div");
+    div.classList.add("saved-item");
     div.dataset.slot = slot;
     div.textContent = item.tag;
     homeContainer.appendChild(div);
@@ -179,7 +186,7 @@ function showAddItemForm() {
     .then(data => {
       console.log('Item saved:', data);
       alert('Item added successfully!');
-      showClothPage();
+      showAddItemForm();
     })
     .catch(err => {
       console.error('Error adding item:', err);
@@ -300,7 +307,7 @@ function showOutfitSetPage() {
   submitBtn.addEventListener('click', () => {
     savedOutfits.push({ ...assignedItems });
     persistOutfits();
-    showClothPage();
+    showOutfitSetPage();
   });
 }
 

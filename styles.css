@@ -105,28 +105,31 @@ body {
   /* Mannequin */
   .mannequin {
     position: absolute;
-    top: 30%;
-    left: 55%;
+    top: 20%;
+    left: 35%;
     transform: translate(-50%, -50%);
     width: 450px;
     height: auto;
-    filter: hue-rotate(0deg); /* Start black */
+    filter: hue-rotate(0deg);
   }
-  /* "Next" Button */
-  .next-button {
+
+  .recommendation-area {
     position: absolute;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
+    top: 25%;
+    right: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
-  /* If the button contains an image */
-  .next-button img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+
+  .next-outfit {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
   }
   
   /* Cloth Page */
@@ -200,12 +203,14 @@ body {
     margin-bottom: 10px;
   }
   
-  .mannequin-area .mannequin {
-    display: block;
-    width: 350px;    /* pick what you like */
-    left: 40%;
-    top: 150px;
-    margin: 0 auto; /* center horizontally */
+  .mannequin {
+    position: absolute;
+    top: 20%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    height: auto;
+    filter: hue-rotate(0deg);
   }
   
   /* Example absolute positioning for drop zones
@@ -244,12 +249,12 @@ body {
   /* Scrollable container for items */
   .scroll-container {
     flex: 1;
-    max-height: 60vh;
+    height: 60vh;
     overflow-y: auto;
     border: 1px solid #ccc;
     padding: 10px;
     display: flex;
-    flex-wrap: wrap;    /* or flex-direction: row */
+    flex-wrap: wrap;
     gap: 10px;
   }
   

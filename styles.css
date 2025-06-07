@@ -14,8 +14,8 @@ body {
   /* Main Mobile Container */
   .mobile-container {
     position: relative;
-    width: 360px;
-    height: 640px;
+    width: 540px;
+    height: 960px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -34,8 +34,8 @@ body {
     z-index: 10;
   }
   .cloth-icon img {
-    width: 48px;
-    height: 48px;
+    width: 72px;
+    height: 72px;
   }
   
   /* Bottom Navigation Bar */
@@ -67,14 +67,14 @@ body {
   /* Icons Hidden by Default */
   .nav-item .icon {
     display: none;
-    width: 24px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
   }
   
   /* Rectangle Indicator Bar Hidden */
   .nav-item .indicator {
     display: none;
-    width: 30px;
+    width: 45px;
     margin-top: 4px;
   }
   
@@ -190,6 +190,7 @@ body {
     padding: 10px;
     height: 100%;
     box-sizing: border-box;
+    overflow-y: auto;
   }
   
   /* The mannequin area + drop zones */
@@ -243,7 +244,7 @@ body {
   /* Scrollable container for items */
   .scroll-container {
     flex: 1;
-    max-height: 40vh;
+    max-height: 60vh;
     overflow-y: auto;
     border: 1px solid #ccc;
     padding: 10px;
@@ -312,6 +313,8 @@ body {
   /* Deletion list on cloth/heart page */
   .delete-container {
     margin-top: 15px;
+    max-height: 70vh;
+    overflow-y: auto;
   }
   .delete-row {
     display: flex;
@@ -332,12 +335,5 @@ body {
     padding: 20px;
   }
 
-  .cancel-btn {
-    background-color: #ccc;
-    color: #000;
-    border: none;
-    border-radius: 4px;
-    padding: 4px 8px;
-    cursor: pointer;
-  }
+
 

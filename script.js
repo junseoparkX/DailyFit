@@ -325,13 +325,8 @@ function showDeleteItemPage() {
               if (res.ok) row.remove();
             });
         });
-        const no = document.createElement('button');
-        no.textContent = 'No';
-        no.classList.add('cancel-btn');
-        no.addEventListener('click', () => row.remove());
         row.appendChild(label);
         row.appendChild(yes);
-        row.appendChild(no);
         list.appendChild(row);
       });
     });
@@ -362,13 +357,8 @@ function showDeleteOutfitPage() {
       savedOutfits.splice(idx, 1);
       row.remove();
     });
-    const no = document.createElement('button');
-    no.textContent = 'No';
-    no.classList.add('cancel-btn');
-    no.addEventListener('click', () => row.remove());
     row.appendChild(label);
     row.appendChild(yes);
-    row.appendChild(no);
     list.appendChild(row);
   });
 }

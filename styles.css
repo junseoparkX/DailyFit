@@ -111,29 +111,29 @@ body {
   /* Mannequin on the home page */
   .home-container .mannequin {
     position: absolute;
-    top: 20%;
+    top: 55%;
     left: 35%;
     transform: translate(-50%, -50%);
-    width: 450px;
+    width: 530px;
     height: auto;
     filter: hue-rotate(0deg);
   }
 
   .recommendation-area {
     position: absolute;
-    top: 25%;
-    right: 5%;
+    top: 60%;
+    right: 10%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 12px;
   }
 
   .next-outfit {
     background: #000;
     color: #fff;
     border: none;
-    padding: 6px 12px;
+    padding: 8px 12px;
     cursor: pointer;
     border-radius: 4px;
   }
@@ -205,16 +205,16 @@ body {
   /* The mannequin area + drop zones */
   .mannequin-area {
     position: relative;
-    flex: 100 100 300px;
-    margin-bottom: 10px;
+    flex: 100 100 100px;
+    margin-bottom: 50px;
   }
   
   .outfit-set-page .mannequin {
     position: absolute;
-    top: 15%;
-    left: 30%;
+    top: 55%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    width: 400px;
+    width: 420px;
     height: auto;
     filter: hue-rotate(0deg);
   }

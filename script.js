@@ -1,7 +1,6 @@
 // ========== GRAB REFERENCES ========== //
 const navItems = document.querySelectorAll('.nav-item');
 const content = document.getElementById('content');
-const clothIcon = document.getElementById('clothIcon');
 
 // Stores the most recently submitted outfit
 let savedOutfit = null;
@@ -18,19 +17,15 @@ navItems.forEach(item => {
     switch (target) {
       case 'home':
         showHomePage();
-        clothIcon.style.display = 'block';
         break;
       case 'search':
         content.innerHTML = '<h1>Search Page</h1>';
-        clothIcon.style.display = 'block';
         break;
       case 'heart':
-        content.innerHTML = '<h1>Heart Page</h1>';
-        clothIcon.style.display = 'block';
+        showClothPage();
         break;
       case 'user':
         content.innerHTML = '<h1>User Page</h1>';
-        clothIcon.style.display = 'block';
         break;
     }
   });
@@ -88,6 +83,9 @@ function showClothPage() {
     <div class="cloth-page">
       <button id="createOutfitBtn" class="top-button">Create Outfit Set</button>
       <button id="addItemBtn" class="top-button">Add Item</button>
+      <button id="deleteOutfitBtn" class="top-button">Delete Outfit</button>
+      <button id="deleteItemBtn" class="top-button">Delete Item</button>
+      <div id="itemDeleteContainer" class="delete-container"></div>
     </div>
   `;
 
@@ -100,6 +98,37 @@ function showClothPage() {
   const addItemBtn = document.getElementById('addItemBtn');
   addItemBtn.addEventListener('click', () => {
     showAddItemForm();
+  });
+
+  const deleteOutfitBtn = document.getElementById('deleteOutfitBtn');
+  deleteOutfitBtn.addEventListener('click', () => {
+    savedOutfit = null;
+    alert('Outfit deleted');
+    showClothPage();
+  });
+
+  const deleteItemBtn = document.getElementById('deleteItemBtn');
+  deleteItemBtn.addEventListener('click', () => {
+    const container = document.getElementById('itemDeleteContainer');
+    container.innerHTML = '';
+    fetch('http://localhost:3000/api/items')
+      .then(res => res.json())
+      .then(items => {
+        items.forEach(item => {
+          const row = document.createElement('div');
+          row.classList.add('delete-row');
+          row.textContent = `${item.type} ${item.color} ${item.tag}`;
+          const btn = document.createElement('button');
+          btn.textContent = 'Delete';
+          btn.classList.add('delete-btn');
+          btn.addEventListener('click', () => {
+            fetch(`http://localhost:3000/api/item/${item.id}`, { method: 'DELETE' })
+              .then(res => res.ok && row.remove());
+          });
+          row.appendChild(btn);
+          container.appendChild(row);
+        });
+      });
   });
 }
 
@@ -285,13 +314,6 @@ function showOutfitSetPage() {
     });
   }
   
-
-// ========== TOP-RIGHT CLOTH ICON CLICK ========== //
-clothIcon.addEventListener('click', () => {
-  showClothPage();
-  clothIcon.style.display = 'none';
-  navItems.forEach(item => item.classList.remove('active'));
-});
 
 // ========== LOAD HOME PAGE BY DEFAULT ========== //
 document.addEventListener('DOMContentLoaded', () => {

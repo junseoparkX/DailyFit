@@ -141,6 +141,23 @@ http://localhost:3000
 ]
 ```
 
+### ➡️ **3. Delete Item**
+- **URL:** `DELETE /api/item/:id`
+- **Description:** Remove a clothing item by its ID.
+
+**Response Example:**
+```json
+{
+  "message": "Item deleted",
+  "item": {
+    "type": "Shoes",
+    "color": "Red",
+    "tag": "Favorite",
+    "id": 1735436537729
+  }
+}
+```
+
 ---
 
 ## 🔑 **Key Features**

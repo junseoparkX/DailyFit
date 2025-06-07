@@ -142,12 +142,13 @@ body {
   }
   
   .top-button {
-    background-color: #eee;
-    border: 1px solid #ccc;
+    background-color: #ff8c00;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
     padding: 8px 12px;
     cursor: pointer;
     font-size: 1rem;
-    /* If you want them at the top, no extra margin needed */
   }
   
   /* "Add Item" Form Container */
@@ -306,5 +307,24 @@ body {
     top: 190px;
     left: 80%;
     transform: translateX(-50%);
+  }
+
+  /* Deletion list on cloth/heart page */
+  .delete-container {
+    margin-top: 15px;
+  }
+  .delete-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+  }
+  .delete-btn {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
   }
 

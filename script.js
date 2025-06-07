@@ -2,8 +2,8 @@
 const navItems = document.querySelectorAll('.nav-item');
 const content = document.getElementById('content');
 
-// Stores the most recently submitted outfit
-let savedOutfit = null;
+// Stores all submitted outfits
+let savedOutfits = [];
 
 // ========== BOTTOM NAV CLICK HANDLER ========== //
 navItems.forEach(item => {
@@ -62,19 +62,26 @@ function showHomePage() {
   nextButton.addEventListener('click', () => {
     colorIndex = (colorIndex + 1) % rainbowFilters.length;
     mannequin.style.filter = rainbowFilters[colorIndex];
+    displayRandomOutfit();
   });
 
-  // If an outfit was submitted, display the selected items
-  if (savedOutfit) {
-    const homeContainer = document.querySelector('.home-container');
-    Object.entries(savedOutfit).forEach(([slot, item]) => {
-      const div = document.createElement('div');
-      div.classList.add('saved-item');
-      div.dataset.slot = slot;
-      div.textContent = item.tag;
-      homeContainer.appendChild(div);
-    });
-  }
+  displayRandomOutfit();
+}
+
+function displayRandomOutfit() {
+  // Remove any existing displayed items
+  document.querySelectorAll('.saved-item').forEach(el => el.remove());
+  if (savedOutfits.length === 0) return;
+  const index = Math.floor(Math.random() * savedOutfits.length);
+  const outfit = savedOutfits[index];
+  const homeContainer = document.querySelector('.home-container');
+  Object.entries(outfit).forEach(([slot, item]) => {
+    const div = document.createElement('div');
+    div.classList.add('saved-item');
+    div.dataset.slot = slot;
+    div.textContent = item.tag;
+    homeContainer.appendChild(div);
+  });
 }
 
 // ========== CLOTH PAGE ========== //
@@ -85,7 +92,6 @@ function showClothPage() {
       <button id="addItemBtn" class="top-button">Add Item</button>
       <button id="deleteOutfitBtn" class="top-button">Delete Outfit</button>
       <button id="deleteItemBtn" class="top-button">Delete Item</button>
-      <div id="itemDeleteContainer" class="delete-container"></div>
     </div>
   `;
 
@@ -102,33 +108,12 @@ function showClothPage() {
 
   const deleteOutfitBtn = document.getElementById('deleteOutfitBtn');
   deleteOutfitBtn.addEventListener('click', () => {
-    savedOutfit = null;
-    alert('Outfit deleted');
-    showClothPage();
+    showDeleteOutfitPage();
   });
 
   const deleteItemBtn = document.getElementById('deleteItemBtn');
   deleteItemBtn.addEventListener('click', () => {
-    const container = document.getElementById('itemDeleteContainer');
-    container.innerHTML = '';
-    fetch('http://localhost:3000/api/items')
-      .then(res => res.json())
-      .then(items => {
-        items.forEach(item => {
-          const row = document.createElement('div');
-          row.classList.add('delete-row');
-          row.textContent = `${item.type} ${item.color} ${item.tag}`;
-          const btn = document.createElement('button');
-          btn.textContent = 'Delete';
-          btn.classList.add('delete-btn');
-          btn.addEventListener('click', () => {
-            fetch(`http://localhost:3000/api/item/${item.id}`, { method: 'DELETE' })
-              .then(res => res.ok && row.remove());
-          });
-          row.appendChild(btn);
-          container.appendChild(row);
-        });
-      });
+    showDeleteItemPage();
   });
 }
 
@@ -307,13 +292,87 @@ function showOutfitSetPage() {
     });
 
     // Submit button stores the outfit and returns to home
-    const submitBtn = document.getElementById('submitOutfitBtn');
-    submitBtn.addEventListener('click', () => {
-      savedOutfit = assignedItems;
-      showHomePage();
+  const submitBtn = document.getElementById('submitOutfitBtn');
+  submitBtn.addEventListener('click', () => {
+    savedOutfits.push({ ...assignedItems });
+    showHomePage();
+  });
+}
+
+function showDeleteItemPage() {
+  content.innerHTML = `
+    <div class="delete-page">
+      <h2>Delete Item</h2>
+      <div id="itemDeleteList" class="delete-container"></div>
+    </div>
+  `;
+
+  const list = document.getElementById('itemDeleteList');
+  fetch('http://localhost:3000/api/items')
+    .then(res => res.json())
+    .then(items => {
+      items.forEach(item => {
+        const row = document.createElement('div');
+        row.classList.add('delete-row');
+        const label = document.createElement('span');
+        label.textContent = `${item.type} ${item.color} ${item.tag} - Delete?`;
+        const yes = document.createElement('button');
+        yes.textContent = 'Yes';
+        yes.classList.add('delete-btn');
+        yes.addEventListener('click', () => {
+          fetch(`http://localhost:3000/api/item/${item.id}`, { method: 'DELETE' })
+            .then(res => {
+              if (res.ok) row.remove();
+            });
+        });
+        const no = document.createElement('button');
+        no.textContent = 'No';
+        no.classList.add('cancel-btn');
+        no.addEventListener('click', () => row.remove());
+        row.appendChild(label);
+        row.appendChild(yes);
+        row.appendChild(no);
+        list.appendChild(row);
+      });
     });
+}
+
+function showDeleteOutfitPage() {
+  content.innerHTML = `
+    <div class="delete-page">
+      <h2>Delete Outfit</h2>
+      <div id="outfitDeleteList" class="delete-container"></div>
+    </div>
+  `;
+
+  const list = document.getElementById('outfitDeleteList');
+  if (savedOutfits.length === 0) {
+    list.textContent = 'No outfits saved.';
+    return;
   }
-  
+  savedOutfits.forEach((outfit, idx) => {
+    const row = document.createElement('div');
+    row.classList.add('delete-row');
+    const label = document.createElement('span');
+    label.textContent = `Outfit ${idx + 1} - Delete?`;
+    const yes = document.createElement('button');
+    yes.textContent = 'Yes';
+    yes.classList.add('delete-btn');
+    yes.addEventListener('click', () => {
+      savedOutfits.splice(idx, 1);
+      row.remove();
+    });
+    const no = document.createElement('button');
+    no.textContent = 'No';
+    no.classList.add('cancel-btn');
+    no.addEventListener('click', () => row.remove());
+    row.appendChild(label);
+    row.appendChild(yes);
+    row.appendChild(no);
+    list.appendChild(row);
+  });
+}
+
 
 // ========== LOAD HOME PAGE BY DEFAULT ========== //
 document.addEventListener('DOMContentLoaded', () => {

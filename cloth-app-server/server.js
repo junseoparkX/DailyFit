@@ -54,6 +54,18 @@ app.get('/api/items', (req, res) => {
   res.json(items);
 });
 
+// API route to delete an item by id
+app.delete('/api/item/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const index = items.findIndex(i => i.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Item not found' });
+  }
+  const removed = items.splice(index, 1)[0];
+  fs.writeFileSync(DATA_FILE, JSON.stringify(items, null, 2));
+  res.json({ message: 'Item deleted', item: removed });
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

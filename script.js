@@ -1,7 +1,14 @@
 // ========== GRAB REFERENCES ========== //
 const navItems = document.querySelectorAll('.nav-item');
 const content = document.getElementById('content');
-const clothIcon = document.getElementById('clothIcon');
+
+// Stores all submitted outfits (persisted in localStorage)
+let savedOutfits = JSON.parse(localStorage.getItem('savedOutfits') || '[]');
+let lastOutfitIndex = -1;
+
+function persistOutfits() {
+  localStorage.setItem('savedOutfits', JSON.stringify(savedOutfits));
+}
 
 // ========== BOTTOM NAV CLICK HANDLER ========== //
 navItems.forEach(item => {
@@ -15,19 +22,15 @@ navItems.forEach(item => {
     switch (target) {
       case 'home':
         showHomePage();
-        clothIcon.style.display = 'block';
         break;
       case 'search':
         content.innerHTML = '<h1>Search Page</h1>';
-        clothIcon.style.display = 'block';
         break;
       case 'heart':
-        content.innerHTML = '<h1>Heart Page</h1>';
-        clothIcon.style.display = 'block';
+        showClothPage();
         break;
       case 'user':
         content.innerHTML = '<h1>User Page</h1>';
-        clothIcon.style.display = 'block';
         break;
     }
   });
@@ -37,16 +40,16 @@ navItems.forEach(item => {
 function showHomePage() {
   content.innerHTML = `
     <div class="home-container">
-      <img class="homepage-banner" src="Image/Page/homepage.svg" alt="Homepage" />
-      <img class="mannequin" id="mannequin" src="Image/Page/mannequin.svg" alt="Mannequin" />
-      <button id="nextButton" class="next-button">
-        <img src="Image/Page/next_button.svg" alt="Next Button" />
-      </button>
+      <img class="homepage-banner" src="Image/Page/homepage.svg" alt="Homepage"/>
+      <img class="mannequin" id="mannequin" src="Image/Page/mannequin.svg" alt="Mannequin"/>
+      <div class="recommendation-area">
+        <h3>Today's Recommendation</h3>
+        <button id="nextOutfitBtn" class="next-outfit">Next</button>
+      </div>
     </div>
   `;
-
-  const mannequin = document.getElementById('mannequin');
-  const nextButton = document.getElementById('nextButton');
+  const mannequin = document.getElementById("mannequin");
+  const nextOutfitBtn = document.getElementById("nextOutfitBtn");
 
   const rainbowFilters = [
     'none',  
@@ -61,9 +64,34 @@ function showHomePage() {
 
   let colorIndex = 0;
 
-  nextButton.addEventListener('click', () => {
+  nextOutfitBtn.addEventListener('click', () => {
     colorIndex = (colorIndex + 1) % rainbowFilters.length;
     mannequin.style.filter = rainbowFilters[colorIndex];
+    displayRandomOutfit(true);
+  });
+
+  displayRandomOutfit();
+}
+
+function displayRandomOutfit(noRepeat = false) {
+  document.querySelectorAll(".saved-item").forEach(el => el.remove());
+  if (savedOutfits.length === 0) return;
+
+  let index = Math.floor(Math.random() * savedOutfits.length);
+  if (noRepeat && savedOutfits.length > 1) {
+    while (index === lastOutfitIndex) {
+      index = Math.floor(Math.random() * savedOutfits.length);
+    }
+  }
+  lastOutfitIndex = index;
+  const outfit = savedOutfits[index];
+  const homeContainer = document.querySelector(".home-container");
+  Object.entries(outfit).forEach(([slot, item]) => {
+    const div = document.createElement("div");
+    div.classList.add("saved-item");
+    div.dataset.slot = slot;
+    div.textContent = item.tag;
+    homeContainer.appendChild(div);
   });
 }
 
@@ -73,6 +101,8 @@ function showClothPage() {
     <div class="cloth-page">
       <button id="createOutfitBtn" class="top-button">Create Outfit Set</button>
       <button id="addItemBtn" class="top-button">Add Item</button>
+      <button id="deleteOutfitBtn" class="top-button">Delete Outfit</button>
+      <button id="deleteItemBtn" class="top-button">Delete Item</button>
     </div>
   `;
 
@@ -85,6 +115,16 @@ function showClothPage() {
   const addItemBtn = document.getElementById('addItemBtn');
   addItemBtn.addEventListener('click', () => {
     showAddItemForm();
+  });
+
+  const deleteOutfitBtn = document.getElementById('deleteOutfitBtn');
+  deleteOutfitBtn.addEventListener('click', () => {
+    showDeleteOutfitPage();
+  });
+
+  const deleteItemBtn = document.getElementById('deleteItemBtn');
+  deleteItemBtn.addEventListener('click', () => {
+    showDeleteItemPage();
   });
 }
 
@@ -116,12 +156,13 @@ function showAddItemForm() {
       <label for="itemTag">Tag:</label>
       <input type="text" id="itemTag" placeholder="Enter a tag..." />
 
-      <button id="submitItemBtn">Submit</button>
+      <button id="submitItemBtn" type="button">Submit</button>
     </div>
   `;
 
   const submitItemBtn = document.getElementById('submitItemBtn');
-  submitItemBtn.addEventListener('click', () => {
+  submitItemBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     const itemType = document.getElementById('itemType').value;
     const itemColor = document.getElementById('itemColor').value;
     const itemTag = document.getElementById('itemTag').value.trim();
@@ -146,7 +187,7 @@ function showAddItemForm() {
     .then(data => {
       console.log('Item saved:', data);
       alert('Item added successfully!');
-      showClothPage();
+      showAddItemForm();
     })
     .catch(err => {
       console.error('Error adding item:', err);
@@ -161,27 +202,38 @@ function showOutfitSetPage() {
         <h2>Create Your Outfit</h2>
         <div class="mannequin-area">
           <img src="Image/Page/mannequin.svg" alt="Mannequin" class="mannequin" />
-  
+
           <!-- Drop zones for hat/top/pants/shoes -->
           <div class="drop-zone" data-slot="hat">Hat Slot</div>
           <div class="drop-zone" data-slot="top">Top Slot</div>
           <div class="drop-zone" data-slot="pants">Pants Slot</div>
           <div class="drop-zone" data-slot="shoes">Shoes Slot</div>
         </div>
-  
-        <!-- Scrollable list of items to drag -->
+
+        <button id="submitOutfitBtn" class="submit-button">Submit Outfit</button>
+
+        <!-- Scrollable list of items to drag/click -->
         <div class="scroll-container" id="scrollContainer">
           <!-- Items will be injected here from /api/items -->
         </div>
       </div>
     `;
-  
+    // Keep track of which item is placed in each slot
+    const assignedItems = {};
+
     // 1) Fetch existing items from the server
     fetch('http://localhost:3000/api/items')
       .then(response => response.json())
       .then(items => {
         const scrollContainer = document.getElementById('scrollContainer');
-  
+
+        const typeToSlot = {
+          Hats: 'hat',
+          Tops: 'top',
+          Pants: 'pants',
+          Shoes: 'shoes'
+        };
+
         // 2) For each item, create a small square DIV that is draggable
         items.forEach(item => {
           const div = document.createElement('div');
@@ -204,10 +256,21 @@ function showOutfitSetPage() {
               id: item.id,
               tag: item.tag,
               type: item.type,
-              color: item.color
-            }));
+            color: item.color
+          }));
+        });
+
+          // Allow click-to-assign
+          div.addEventListener('click', () => {
+            const slotName = typeToSlot[item.type];
+            if (!slotName) return;
+            const zone = document.querySelector(`.drop-zone[data-slot="${slotName}"]`);
+            if (zone) {
+              zone.textContent = item.tag;
+              assignedItems[slotName] = item;
+            }
           });
-  
+
           scrollContainer.appendChild(div);
         });
       })
@@ -235,18 +298,90 @@ function showOutfitSetPage() {
       const draggedItem = JSON.parse(data);
       // For demonstration, we’ll just show a label in the zone
       dropZone.textContent = `${draggedItem.tag}`;
-  
-      // Optionally store in some state, e.g. assignedItems[dropZone.dataset.slot] = draggedItem
-    });
-  }
-  
 
-// ========== TOP-RIGHT CLOTH ICON CLICK ========== //
-clothIcon.addEventListener('click', () => {
-  showClothPage();
-  clothIcon.style.display = 'none';
-  navItems.forEach(item => item.classList.remove('active'));
-});
+      // Store the assignment
+      assignedItems[dropZone.dataset.slot] = draggedItem;
+    });
+
+    // Submit button stores the outfit and returns to cloth page
+  const submitBtn = document.getElementById('submitOutfitBtn');
+  submitBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    savedOutfits.push({ ...assignedItems });
+    persistOutfits();
+    showOutfitSetPage();
+  });
+}
+
+function showDeleteItemPage() {
+  content.innerHTML = `
+    <div class="delete-page">
+      <h2>Delete Item</h2>
+      <div id="itemDeleteList" class="delete-container"></div>
+    </div>
+  `;
+
+  const list = document.getElementById('itemDeleteList');
+  fetch('http://localhost:3000/api/items')
+    .then(res => res.json())
+    .then(items => {
+      items.forEach(item => {
+        const row = document.createElement('div');
+        row.classList.add('delete-row');
+        const label = document.createElement('span');
+        label.textContent = `${item.type} ${item.color} ${item.tag} - Delete?`;
+        const yes = document.createElement('button');
+        yes.textContent = 'Yes';
+        yes.type = 'button';
+        yes.classList.add('delete-btn');
+        yes.addEventListener('click', (e) => {
+          e.preventDefault();
+          fetch(`http://localhost:3000/api/item/${item.id}`, { method: 'DELETE' })
+            .then(res => {
+              if (res.ok) row.remove();
+            });
+        });
+        row.appendChild(label);
+        row.appendChild(yes);
+        list.appendChild(row);
+      });
+    });
+}
+
+function showDeleteOutfitPage() {
+  content.innerHTML = `
+    <div class="delete-page">
+      <h2>Delete Outfit</h2>
+      <div id="outfitDeleteList" class="delete-container"></div>
+    </div>
+  `;
+
+  const list = document.getElementById('outfitDeleteList');
+  if (savedOutfits.length === 0) {
+    list.textContent = 'No outfits saved.';
+    return;
+  }
+  savedOutfits.forEach((outfit, idx) => {
+    const row = document.createElement('div');
+    row.classList.add('delete-row');
+    const label = document.createElement('span');
+    label.textContent = `Outfit ${idx + 1} - Delete?`;
+    const yes = document.createElement('button');
+    yes.textContent = 'Yes';
+    yes.type = 'button';
+    yes.classList.add('delete-btn');
+    yes.addEventListener('click', (e) => {
+      e.preventDefault();
+      savedOutfits.splice(idx, 1);
+      persistOutfits();
+      row.remove();
+    });
+    row.appendChild(label);
+    row.appendChild(yes);
+    list.appendChild(row);
+  });
+}
+
 
 // ========== LOAD HOME PAGE BY DEFAULT ========== //
 document.addEventListener('DOMContentLoaded', () => {

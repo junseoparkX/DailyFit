@@ -33,6 +33,10 @@ cd cloth-app-server
 npm install
 ```
 
+If you encounter an error such as `Cannot find module 'debug'`, this means the
+dependencies have not been installed. Run the `npm install` command above and
+then try starting the server again.
+
 3. Start the backend server:
 ```bash
 node server.js
@@ -137,12 +141,30 @@ http://localhost:3000
 ]
 ```
 
+### ➡️ **3. Delete Item**
+- **URL:** `DELETE /api/item/:id`
+- **Description:** Remove a clothing item by its ID.
+
+**Response Example:**
+```json
+{
+  "message": "Item deleted",
+  "item": {
+    "type": "Shoes",
+    "color": "Red",
+    "tag": "Favorite",
+    "id": 1735436537729
+  }
+}
+```
+
 ---
 
 ## 🔑 **Key Features**
 
 - **Interactive Mannequin Customization:** Change mannequin colors dynamically.
 - **Add Clothing Items:** Add items with type, color, and tags.
+- **Save Multiple Outfits:** Build outfits and cycle through them randomly on the home page.
 - **Persistent Data Storage:** All items are saved in `data.json`.
 - **Dynamic Navigation Bar:** Switch between Home, Search, Favorites, and User views seamlessly.
 
@@ -156,7 +178,13 @@ http://localhost:3000
    - Navigate to the **"Add Item"** page.
    - Fill in **Type**, **Color**, and **Tag** fields.
    - Click **Submit** to save the item.
-4. **Verify Backend Storage:**
+4. **Create Outfits:**
+   - Use **"Create Outfit Set"** to place items in slots and submit the outfit.
+   - Saved outfits will appear randomly when pressing **Next** on the home page.
+5. **Delete Items or Outfits:**
+   - Choose **"Delete Item"** or **"Delete Outfit"** from the heart page.
+   - Confirm with **Yes** or cancel with **No** for each entry.
+6. **Verify Backend Storage:**
    - Added items are saved to `data.json`.
    - Retrieve all items via `http://localhost:3000/api/items`.
 

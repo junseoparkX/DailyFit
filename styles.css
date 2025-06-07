@@ -14,7 +14,7 @@ body {
   /* Main Mobile Container */
   .mobile-container {
     position: relative;
-    width: min(90vw, 702px);
+    width: min(90vw, 648px);
     height: 100vh;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -105,7 +105,7 @@ body {
   /* Mannequin */
   .mannequin {
     position: absolute;
-    top: 35%;
+    top: 30%;
     left: 55%;
     transform: translate(-50%, -50%);
     width: 450px;
@@ -115,9 +115,9 @@ body {
   /* "Next" Button */
   .next-button {
     position: absolute;
-    top: 67%; 
+    bottom: 80px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     background: none;
     border: none;
     cursor: pointer;

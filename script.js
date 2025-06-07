@@ -2,8 +2,12 @@
 const navItems = document.querySelectorAll('.nav-item');
 const content = document.getElementById('content');
 
-// Stores all submitted outfits
-let savedOutfits = [];
+// Stores all submitted outfits (persisted in localStorage)
+let savedOutfits = JSON.parse(localStorage.getItem('savedOutfits') || '[]');
+
+function persistOutfits() {
+  localStorage.setItem('savedOutfits', JSON.stringify(savedOutfits));
+}
 
 // ========== BOTTOM NAV CLICK HANDLER ========== //
 navItems.forEach(item => {
@@ -291,11 +295,12 @@ function showOutfitSetPage() {
       assignedItems[dropZone.dataset.slot] = draggedItem;
     });
 
-    // Submit button stores the outfit and returns to home
+    // Submit button stores the outfit and returns to cloth page
   const submitBtn = document.getElementById('submitOutfitBtn');
   submitBtn.addEventListener('click', () => {
     savedOutfits.push({ ...assignedItems });
-    showHomePage();
+    persistOutfits();
+    showClothPage();
   });
 }
 
@@ -355,6 +360,7 @@ function showDeleteOutfitPage() {
     yes.classList.add('delete-btn');
     yes.addEventListener('click', () => {
       savedOutfits.splice(idx, 1);
+      persistOutfits();
       row.remove();
     });
     row.appendChild(label);

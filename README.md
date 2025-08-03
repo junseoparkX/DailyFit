@@ -1,4 +1,4 @@
-# 🚀 **DailyFit Application**
+# 🚀 **DailyFit Virtual Outfit Manager**
 
 DailyFit is a mobile-friendly web application designed to manage and customize virtual outfits. It offers dynamic navigation, interactive UI elements, and seamless backend integration.
 
